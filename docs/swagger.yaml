@@ -1,0 +1,280 @@
+basePath: /
+definitions:
+  github_com_codicuz_subscription-service_internal_model.CreateSubscriptionRequest:
+    properties:
+      end_date:
+        type: string
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  github_com_codicuz_subscription-service_internal_model.CustomDate:
+    properties:
+      month:
+        type: integer
+      year:
+        type: integer
+    type: object
+  github_com_codicuz_subscription-service_internal_model.Subscription:
+    properties:
+      created_at:
+        type: string
+      end_date:
+        $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.CustomDate'
+      id:
+        type: string
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.CustomDate'
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  github_com_codicuz_subscription-service_internal_model.SubscriptionReport:
+    properties:
+      total_cost:
+        type: integer
+    type: object
+  github_com_codicuz_subscription-service_internal_model.SubscriptionReportRequest:
+    properties:
+      end_date:
+        type: string
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  github_com_codicuz_subscription-service_internal_model.UpdateSubscriptionRequest:
+    properties:
+      end_date:
+        description: формат "MM-YYYY"
+        type: string
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        description: формат "MM-YYYY"
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API для управления подписками пользователей
+  title: Subscription Service API
+  version: "1.0"
+paths:
+  /subscriptions:
+    get:
+      description: Возвращает список подписок с пагинацией
+      parameters:
+      - default: 10
+        description: Количество записей
+        in: query
+        name: limit
+        type: integer
+      - default: 0
+        description: Смещение
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.Subscription'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить список подписок
+      tags:
+      - subscriptions
+    post:
+      consumes:
+      - application/json
+      description: Создает новую запись о подписке
+      parameters:
+      - description: Данные подписки
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.CreateSubscriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.Subscription'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Создать подписку
+      tags:
+      - subscriptions
+  /subscriptions/{id}:
+    delete:
+      description: Удаляет подписку по ID
+      parameters:
+      - description: UUID подписки
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Удалить подписку
+      tags:
+      - subscriptions
+    get:
+      description: Возвращает подписку по её идентификатору
+      parameters:
+      - description: UUID подписки
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.Subscription'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить подписку по ID
+      tags:
+      - subscriptions
+    put:
+      consumes:
+      - application/json
+      description: Обновляет существующую подписку
+      parameters:
+      - description: UUID подписки
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Данные для обновления
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.UpdateSubscriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.Subscription'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Обновить подписку
+      tags:
+      - subscriptions
+  /subscriptions/report:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает суммарную стоимость подписок за выбранный период
+      parameters:
+      - description: Параметры отчета
+        in: body
+        name: report
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.SubscriptionReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_codicuz_subscription-service_internal_model.SubscriptionReport'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить отчет по стоимости
+      tags:
+      - subscriptions
+swagger: "2.0"
