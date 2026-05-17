@@ -28,3 +28,21 @@ curl -X GET http://$HOST:8080/subscriptions/report \
     "start_date": "01-2026",
     "end_date": "12-2026"
   }'
+
+curl -X GET http://$HOST:8080/subscriptions/report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "60601fee-2bf1-4721-ae6f-7636e79a0cba",
+    "service_name": "Yandex",
+    "start_date": "01-2026",
+    "end_date": "12-2026"
+  }'
+
+curl -X GET http://$HOST:8080/subscriptions/report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "60601fee-2bf1-4721-ae6f-7636e79a0cba",
+    "service_name": "Netflix",
+    "start_date": "01-2026",
+    "end_date": "12-2026"
+  }'
