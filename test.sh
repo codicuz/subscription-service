@@ -46,3 +46,10 @@ curl -X GET http://$HOST:8080/subscriptions/report \
     "start_date": "01-2026",
     "end_date": "12-2026"
   }'
+
+curl -X GET http://$HOST:8080/subscriptions/report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "start_date": "01-2026",
+    "end_date": "12-2026"
+  }'
