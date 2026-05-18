@@ -2,11 +2,43 @@
 
 ## Запуск
 
+### Docker Compose
+
 ```bash
 docker compose up --build
 ```
 
+### Podman
+
+```bash
+chmod +x podman-start.sh
+./podman-start.sh
+```
+
 Сервис будет на `http://localhost:8080`.
+
+## Тестирование
+
+```bash
+chmod +x test.sh
+./test.sh
+```
+
+## Остановка
+
+### Docker Compose
+
+```bash
+docker compose down
+```
+
+### Podman
+
+```bash
+podman pod stop subscription-pod
+podman pod rm subscription-pod
+podman volume rm subscription-data
+```
 
 ## API
 
